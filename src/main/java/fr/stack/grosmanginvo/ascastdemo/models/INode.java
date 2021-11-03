@@ -8,9 +8,9 @@ public interface INode {
 
     public ISource getSource();
 
-    public List<?> getNeighbors();
+    public List<INeighbor> getNeighbors();
 
-    public void setNeighbors(List<?> neighbors);
+    public void setNeighbors(List<INeighbor> neighbors);
 
     public boolean isSource();
 

@@ -1,11 +1,20 @@
 package fr.stack.grosmanginvo.ascastdemo.models;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
 import java.util.List;
 
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class Node implements INode {
 
     private ISource source;
-    private List<?> neighbors;
+    @Builder.Default
+    private List<INeighbor> neighbors = new ArrayList<>();
     private boolean isSource;
 
     @Override
@@ -19,12 +28,12 @@ public class Node implements INode {
     }
 
     @Override
-    public List<?> getNeighbors() {
+    public List<INeighbor> getNeighbors() {
         return this.neighbors;
     }
 
     @Override
-    public void setNeighbors(List<?> neighbors) {
+    public void setNeighbors(List<INeighbor> neighbors) {
         this.neighbors = neighbors;
     }
 

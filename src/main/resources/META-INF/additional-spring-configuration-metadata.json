@@ -1,0 +1,8 @@
+{
+  "properties": [
+    {
+      "name": "IS_SOURCE",
+      "type": "java.lang.String",
+      "description": "Description for IS_SOURCE."
+  }
+] }
