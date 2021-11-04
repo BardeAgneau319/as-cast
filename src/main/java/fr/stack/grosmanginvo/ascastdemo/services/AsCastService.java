@@ -11,29 +11,49 @@ public class AsCastService {
 
     private final INode node;
 
-    public void receiveAdd(ISource newSource) {
-        // CAS 1 : Source plus mauvaise ==> On fait rien
+    public void receiveAdd(ISource sourceAdd) {
 
-        // CAS 2 : Source périmé ==> conflit & faire un delete TODO
-        if (this.node.getSource() != null && this.node.getSource().getDistance() <= newSource.getDistance()) {
-            this.receiveDel(this.node.getSource(), newSource);
-        } else {
-        // CAS 3 : Meilleure source ==> Remplacer envoyer des add
-            this.node.setSource(newSource);
+        // Detect inconsistency and delete inconsistent message
+        // TODO : Understand isStale function
+        if ((this.node.getSource() != null && this.node.getVersion().isStale())
+                || (!sourceAdd.isLooping(node) && (this.node.getSource() != null && this.node.getSource().getDistance() > sourceAdd.getDistance()))) {
+            // Resolve inconsistency and propagate fix
+            this.receiveDel(sourceAdd);
+        } else if (!sourceAdd.isLooping(node) && (this.node.getSource() == null || this.node.getSource().getDistance() > sourceAdd.getDistance())) {
+            // Better source received
+            // TODO : Understand update function
+            this.node.getVersion().update();
+            this.node.setSource(sourceAdd);
+
             ISource sourceToSend = Source.builder()
-                    .neighbor(new Neighbor("myAddress"))
-                    .distance(newSource.getDistance() + 1)
+                    .neighbor(new Neighbor(this.node.getAddress()))
+                    .distance(sourceAdd.getDistance() + 1)
                     .build();
             for (var neighbor : this.node.getNeighbors()) {
-                this.sendAdd(sourceToSend, neighbor);
+                // HTTP CALL TO /add-event and send sourceToSend
+            }
+        } // else do nothing
+    }
+
+    public void receiveDel(ISource sourceDel) {
+        // Current source has been deleted
+        if (sourceDel.isSame(this.node.getSource()) && !sourceDel.isLooping(node)) {
+            // TODO : Understand update function
+            this.node.getVersion().update();
+            this.node.setSource(null);
+
+            for (var neighbor : this.node.getNeighbors()) {
+                // HTTP CALL TO /delete-event and send sourceToSend
+            }
+        } else if (this.node.getSource() != null) {
+            // if current source still exists => use it to fill gap for neighbors
+            ISource sourceToSend = Source.builder()
+                    .neighbor(new Neighbor(this.node.getAddress()))
+                    .distance(this.node.getSource().getDistance() + 1)
+                    .build();
+            for (var neighbor : this.node.getNeighbors()) {
+                // HTTP CALL TO /add-event and send sourceToSend
             }
         }
-    }
-
-    public void sendAdd(ISource newSource, INeighbor receiver) {
-        // TODO: CALL HTTP
-    }
-
-    private void receiveDel(ISource mySource, ISource newSource) {
     }
 }

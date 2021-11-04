@@ -16,4 +16,8 @@ public interface INode {
 
     public void setIsSource(boolean isSource);
 
+    public String getAddress();
+
+    IVersion getVersion();
+
 }

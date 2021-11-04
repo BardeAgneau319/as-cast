@@ -20,6 +20,7 @@ public class NodeBeanConfiguration {
         if (node==null) {
             this.node = Node.builder()
                     .isSource(env.getProperty("IS_SOURCE", Boolean.TYPE, false))
+                    .address(env.getProperty("ADDRESS", String.class))
                     .build();
         }
 

@@ -16,6 +16,8 @@ public class Node implements INode {
     @Builder.Default
     private List<INeighbor> neighbors = new ArrayList<>();
     private boolean isSource;
+    private String address;
+    private IVersion version;
 
     @Override
     public void setSource(ISource source) {
@@ -45,5 +47,15 @@ public class Node implements INode {
     @Override
     public void setIsSource(boolean isSource) {
         this.isSource = isSource;
+    }
+
+    @Override
+    public String getAddress() {
+        return address;
+    }
+
+    @Override
+    public IVersion getVersion() {
+        return version;
     }
 }
