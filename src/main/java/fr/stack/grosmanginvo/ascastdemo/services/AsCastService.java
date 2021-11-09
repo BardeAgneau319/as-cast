@@ -3,6 +3,9 @@ package fr.stack.grosmanginvo.ascastdemo.services;
 import fr.stack.grosmanginvo.ascastdemo.models.*;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+
+import java.util.Objects;
 
 @Service
 @AllArgsConstructor
@@ -16,10 +19,10 @@ public class AsCastService {
         // Detect inconsistency and delete inconsistent message
         // TODO : Understand isStale function
         if ((this.node.getSource() != null && this.node.getVersion().isStale())
-                || (!sourceAdd.isLooping(node) && (this.node.getSource() != null && this.node.getSource().getDistance() > sourceAdd.getDistance()))) {
+                || (!this.detectLoop(sourceAdd) && (this.node.getSource() != null && this.node.getSource().getDistance() > sourceAdd.getDistance()))) {
             // Resolve inconsistency and propagate fix
             this.receiveDel(sourceAdd);
-        } else if (!sourceAdd.isLooping(node) && (this.node.getSource() == null || this.node.getSource().getDistance() > sourceAdd.getDistance())) {
+        } else if (!this.detectLoop(sourceAdd)  && (this.node.getSource() == null || this.node.getSource().getDistance() > sourceAdd.getDistance())) {
             // Better source received
             // TODO : Understand update function
             this.node.getVersion().update();
@@ -37,7 +40,7 @@ public class AsCastService {
 
     public void receiveDel(ISource sourceDel) {
         // Current source has been deleted
-        if (sourceDel.isSame(this.node.getSource()) && !sourceDel.isLooping(node)) {
+        if (this.detectEqualSources(sourceDel, this.node.getSource()) && !this.detectLoop(sourceDel)) {
             // TODO : Understand update function
             this.node.getVersion().update();
             this.node.setSource(null);
@@ -55,5 +58,17 @@ public class AsCastService {
                 this.httpService.postAsCastAdd(sourceToSend, neighbor);
             }
         }
+    }
+
+    boolean detectLoop(ISource source) {
+        for (var neighbor : source.getPath()) {
+            if (neighbor.getAddress().equals(this.node.getAddress()))
+                return true;
+        }
+        return false;
+    }
+
+    boolean detectEqualSources(ISource source1, ISource source2) {
+        return Objects.equals(source1.getNeighbor().getAddress(), source2.getNeighbor().getAddress());
     }
 }

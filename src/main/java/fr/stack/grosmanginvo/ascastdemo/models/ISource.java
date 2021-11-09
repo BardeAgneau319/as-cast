@@ -12,8 +12,4 @@ public interface ISource {
 
     List<INeighbor> getPath();
     void setPath(List<INeighbor> neighbors);
-
-    boolean isLooping(INode node);
-
-    boolean isSame(ISource source);
 }
