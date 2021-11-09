@@ -1,16 +1,22 @@
 package fr.stack.grosmanginvo.ascastdemo.controllers;
 
+import fr.stack.grosmanginvo.ascastdemo.configurations.Routes;
+import fr.stack.grosmanginvo.ascastdemo.models.ISource;
 import fr.stack.grosmanginvo.ascastdemo.services.AsCastService;
+import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/as-cast")
+@RequestMapping(Routes.AS_CAST_ROOT)
+@AllArgsConstructor
 public class AsCastController {
 
-    @GetMapping("/source")
+    private final AsCastService asCastService;
+
+    @GetMapping(Routes.AS_CAST_SOURCE)
     public void getSource() {
 
     }
@@ -19,16 +25,16 @@ public class AsCastController {
     /**
      * Endpoint called when a source is deleted in the network
      */
-    @PostMapping("/delete-event")
-    public void del() {
-
+    @PostMapping(Routes.AS_CAST_DELL)
+    public void del(ISource source) {
+        this.asCastService.receiveDel(source);
     }
 
     /**
      * Endpoint called when a source is added in the network
      */
-    @PostMapping("/add-event")
-    public void add() {
-        // TODO: run receiveAdd for service
+    @PostMapping(Routes.AS_CAST_ADD)
+    public void add(ISource source) {
+        this.asCastService.receiveAdd(source);
     }
 }

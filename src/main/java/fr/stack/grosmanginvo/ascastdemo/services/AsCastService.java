@@ -2,7 +2,6 @@ package fr.stack.grosmanginvo.ascastdemo.services;
 
 import fr.stack.grosmanginvo.ascastdemo.models.*;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -10,6 +9,7 @@ import org.springframework.stereotype.Service;
 public class AsCastService {
 
     private final INode node;
+    private final HttpService httpService;
 
     public void receiveAdd(ISource sourceAdd) {
 
@@ -30,7 +30,7 @@ public class AsCastService {
                     .distance(sourceAdd.getDistance() + 1)
                     .build();
             for (var neighbor : this.node.getNeighbors()) {
-                // HTTP CALL TO /add-event and send sourceToSend
+                this.httpService.postAsCastAdd(sourceToSend, neighbor);
             }
         } // else do nothing
     }
@@ -43,7 +43,7 @@ public class AsCastService {
             this.node.setSource(null);
 
             for (var neighbor : this.node.getNeighbors()) {
-                // HTTP CALL TO /delete-event and send sourceToSend
+                this.httpService.postAsCastDel(sourceDel, neighbor);
             }
         } else if (this.node.getSource() != null) {
             // if current source still exists => use it to fill gap for neighbors
@@ -52,7 +52,7 @@ public class AsCastService {
                     .distance(this.node.getSource().getDistance() + 1)
                     .build();
             for (var neighbor : this.node.getNeighbors()) {
-                // HTTP CALL TO /add-event and send sourceToSend
+                this.httpService.postAsCastAdd(sourceToSend, neighbor);
             }
         }
     }
