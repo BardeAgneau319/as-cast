@@ -34,7 +34,7 @@ public class AsCastService {
 
     public void receiveDel(ISource sourceDel) {
         // Current source has been deleted
-        // TODO : première partie condition
+        // TODO : première partie condition => vérifier que le del n'est pas obsolète
         if (server.getSource().equals(sourceDel) && !this.isLooping(sourceDel)) {
             this.server.updateVersion(sourceDel);
             this.server.setSource(null);

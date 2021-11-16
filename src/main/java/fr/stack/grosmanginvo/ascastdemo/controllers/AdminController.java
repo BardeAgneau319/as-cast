@@ -22,8 +22,8 @@ public class AdminController {
      * @param isSource Whether the node is a source
      */
     @PostMapping("/is-source")
-    public void setIsSource(@RequestParam boolean isSource) {
-
+    public void setIsSource(@RequestParam boolean isSource) throws ExecutionControl.NotImplementedException {
+        throw new ExecutionControl.NotImplementedException("Not implemented");
     }
 
     @GetMapping("is-source")
