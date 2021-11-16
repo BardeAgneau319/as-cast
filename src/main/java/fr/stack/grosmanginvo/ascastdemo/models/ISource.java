@@ -4,12 +4,18 @@ import java.util.List;
 
 public interface ISource {
 
-    INeighbor getNeighbor();
-    void setNeighbor(INeighbor neighbor);
+    INode getNode();
+    void setNode(INode node);
 
     int getDistance();
     void setDistance(int distance);
 
-    List<INeighbor> getPath();
-    void setPath(List<INeighbor> neighbors);
+    List<INode> getPath();
+    void setPath(List<INode> neighbors);
+
+    int getVersion();
+
+    boolean isBetter(ISource other);
+
+    boolean equals(ISource other);
 }

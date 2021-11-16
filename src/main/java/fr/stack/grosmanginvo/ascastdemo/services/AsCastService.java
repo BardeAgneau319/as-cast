@@ -3,36 +3,30 @@ package fr.stack.grosmanginvo.ascastdemo.services;
 import fr.stack.grosmanginvo.ascastdemo.models.*;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
-import java.util.Objects;
+import java.util.List;
 
 @Service
 @AllArgsConstructor
 public class AsCastService {
 
-    private final INode node;
+    private final IServer server;
     private final HttpService httpService;
 
     public void receiveAdd(ISource sourceAdd) {
 
         // Detect inconsistency and delete inconsistent message
-        // TODO : Understand isStale function
-        if ((this.node.getSource() != null && this.node.getVersion().isStale())
-                || (!this.detectLoop(sourceAdd) && (this.node.getSource() != null && this.node.getSource().getDistance() > sourceAdd.getDistance()))) {
+        // TODO : deuxième partie condition
+        if (this.server.isStale(sourceAdd)) {
             // Resolve inconsistency and propagate fix
             this.receiveDel(sourceAdd);
-        } else if (!this.detectLoop(sourceAdd)  && (this.node.getSource() == null || this.node.getSource().getDistance() > sourceAdd.getDistance())) {
+        } else if (!this.isLooping(sourceAdd) && sourceAdd.isBetter(server.getSource())) {
             // Better source received
-            // TODO : Understand update function
-            this.node.getVersion().update();
-            this.node.setSource(sourceAdd);
+            this.server.updateVersion(sourceAdd);
+            this.server.setSource(sourceAdd);
 
-            ISource sourceToSend = Source.builder()
-                    .neighbor(new Neighbor(this.node.getAddress()))
-                    .distance(sourceAdd.getDistance() + 1)
-                    .build();
-            for (var neighbor : this.node.getNeighbors()) {
+            ISource sourceToSend = computeSourceToSend(sourceAdd);
+            for (var neighbor : this.server.getNeighbors()) {
                 this.httpService.postAsCastAdd(sourceToSend, neighbor);
             }
         } // else do nothing
@@ -40,35 +34,41 @@ public class AsCastService {
 
     public void receiveDel(ISource sourceDel) {
         // Current source has been deleted
-        if (this.detectEqualSources(sourceDel, this.node.getSource()) && !this.detectLoop(sourceDel)) {
-            // TODO : Understand update function
-            this.node.getVersion().update();
-            this.node.setSource(null);
+        // TODO : première partie condition
+        if (server.getSource().equals(sourceDel) && !this.isLooping(sourceDel)) {
+            this.server.updateVersion(sourceDel);
+            this.server.setSource(null);
 
-            for (var neighbor : this.node.getNeighbors()) {
+            for (var neighbor : this.server.getNeighbors()) {
                 this.httpService.postAsCastDel(sourceDel, neighbor);
             }
-        } else if (this.node.getSource() != null) {
+        } else if (this.server.getSource() != null) {
             // if current source still exists => use it to fill gap for neighbors
-            ISource sourceToSend = Source.builder()
-                    .neighbor(new Neighbor(this.node.getAddress()))
-                    .distance(this.node.getSource().getDistance() + 1)
-                    .build();
-            for (var neighbor : this.node.getNeighbors()) {
+            ISource sourceToSend = computeSourceToSend(this.server.getSource());
+            for (var neighbor : this.server.getNeighbors()) {
                 this.httpService.postAsCastAdd(sourceToSend, neighbor);
             }
         }
     }
 
-    boolean detectLoop(ISource source) {
-        for (var neighbor : source.getPath()) {
-            if (neighbor.getAddress().equals(this.node.getAddress()))
+    boolean isLooping(ISource source) {
+        for (var node : source.getPath()) {
+            if (node.getAddress().equals(this.server.getAddress()))
                 return true;
         }
         return false;
     }
 
-    boolean detectEqualSources(ISource source1, ISource source2) {
-        return Objects.equals(source1.getNeighbor().getAddress(), source2.getNeighbor().getAddress());
+    ISource computeSourceToSend(ISource source) {
+        List<INode> path = source.getPath();
+        path.add(this.server.toNode());
+
+        ISource sourceToSend = Source.builder()
+                .node(source.getNode())
+                .distance(source.getDistance() + 1)
+                .path(path)
+                .version(source.getVersion())
+                .build();
+        return sourceToSend;
     }
 }

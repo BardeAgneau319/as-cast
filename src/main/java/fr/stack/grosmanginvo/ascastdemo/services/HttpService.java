@@ -1,7 +1,7 @@
 package fr.stack.grosmanginvo.ascastdemo.services;
 
 import fr.stack.grosmanginvo.ascastdemo.configurations.Routes;
-import fr.stack.grosmanginvo.ascastdemo.models.INeighbor;
+import fr.stack.grosmanginvo.ascastdemo.models.INode;
 import fr.stack.grosmanginvo.ascastdemo.models.ISource;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpEntity;
@@ -18,7 +18,7 @@ public class HttpService {
 
     private final RestTemplate restTemplate;
 
-    public void postAsCastAdd(ISource source, INeighbor target) {
+    public void postAsCastAdd(ISource source, INode target) {
         String url = target.getAddress() + Routes.AS_CAST_ROOT + Routes.AS_CAST_ADD;
 
         Map<String, Object> parameters = new HashMap<>();
@@ -28,7 +28,7 @@ public class HttpService {
         ResponseEntity<Void> response = this.restTemplate.postForEntity(url, entity, void.class);
     }
 
-    public void postAsCastDel(ISource source, INeighbor target) {
+    public void postAsCastDel(ISource source, INode target) {
         String url = target.getAddress() + Routes.AS_CAST_ROOT + Routes.AS_CAST_DELL;
 
         Map<String, Object> parameters = new HashMap<>();

@@ -3,6 +3,7 @@ package fr.stack.grosmanginvo.ascastdemo.controllers;
 import fr.stack.grosmanginvo.ascastdemo.configurations.Routes;
 import fr.stack.grosmanginvo.ascastdemo.models.ISource;
 import fr.stack.grosmanginvo.ascastdemo.services.AsCastService;
+import jdk.jshell.spi.ExecutionControl;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,6 +22,13 @@ public class AsCastController {
 
     }
 
+    /**
+     * Endpoint called by a node who want the data
+     */
+    @GetMapping(Routes.AS_CAST_DATA)
+    public void getData() throws ExecutionControl.NotImplementedException {
+        throw new ExecutionControl.NotImplementedException("Not implemented");
+    }
 
     /**
      * Endpoint called when a source is deleted in the network
