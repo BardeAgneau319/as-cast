@@ -19,6 +19,8 @@ public class Server implements IServer {
     private String address;
     @Builder.Default
     private IVersions versions = new Versions();
+    @Builder.Default
+    private int version = 0;
 
     @Override
     public void setSource(ISource source) {
@@ -66,7 +68,22 @@ public class Server implements IServer {
     }
 
     @Override
+    public boolean shouldDel(ISource incomingSource) {
+        return this.source.equals(incomingSource) && this.source.getVersion() < incomingSource.getVersion();
+    }
+
+    @Override
     public INode toNode() {
         return new Node(this.address);
+    }
+
+    @Override
+    public void setVersion(int version) {
+        this.version = version;
+    }
+
+    @Override
+    public int getVersion() {
+        return this.version;
     }
 }

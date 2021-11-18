@@ -2,6 +2,7 @@ package fr.stack.grosmanginvo.ascastdemo.models;
 
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -12,7 +13,8 @@ import java.util.List;
 public class Source implements ISource {
     private INode node;
     private int distance;
-    private List<INode> path;
+    @Builder.Default
+    private List<INode> path = new ArrayList<>();
     private int version;
 
     @Override

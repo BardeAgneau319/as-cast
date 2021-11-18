@@ -22,6 +22,12 @@ public interface IServer {
 
     void updateVersion(ISource incomingSource);
 
-    public INode toNode();
+    boolean shouldDel(ISource incomingSource);
+
+    INode toNode();
+
+    void setVersion(int version);
+
+    int getVersion();
 
 }

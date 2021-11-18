@@ -24,10 +24,11 @@ public class AsCastController {
 
     /**
      * Endpoint called by a node who want the data
+     * TODO: Implement function return a JSON
      */
     @GetMapping(Routes.AS_CAST_DATA)
-    public void getData() throws ExecutionControl.NotImplementedException {
-        throw new ExecutionControl.NotImplementedException("Not implemented");
+    public void getData() {
+        asCastService.getData();
     }
 
     /**
