@@ -3,6 +3,7 @@ package fr.stack.grosmanginvo.ascastdemo.services;
 import fr.stack.grosmanginvo.ascastdemo.configurations.Routes;
 import fr.stack.grosmanginvo.ascastdemo.models.INode;
 import fr.stack.grosmanginvo.ascastdemo.models.ISource;
+import fr.stack.grosmanginvo.ascastdemo.models.MockData;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
@@ -39,4 +40,11 @@ public class HttpService {
     }
 
 
+    public MockData getAsCastData(INode target) {
+        String url = target.getAddress() + Routes.AS_CAST_ROOT + Routes.AS_CAST_DATA;
+
+        ResponseEntity<MockData> response = this.restTemplate.getForEntity(url, MockData.class);
+
+        return response.getBody();
+    }
 }

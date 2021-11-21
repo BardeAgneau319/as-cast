@@ -96,12 +96,15 @@ public class AsCastService {
     }
 
     // simulate fetching data from source
-    public void getData() {
-        if (this.server.getSource().getDistance() > 0) {
-            // TODO: HTTP call the same datapoint for the next node in path
-            // return HTTP response => getPath().get(0)
+    public MockData getData() {
+        if (!this.server.isSource()) {
+            INode nextNode = this.server.getSource().getPath().get(0);
+            return this.httpService.getAsCastData(nextNode);
         } else {
-            return; // JSON with mock response
+            return MockData.builder()
+                    .address(this.server.getAddress())
+                    .someField(String.format("This is some data coming from node %s", this.server.getAddress()))
+                    .build();
         }
     }
 }

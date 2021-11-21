@@ -2,6 +2,7 @@ package fr.stack.grosmanginvo.ascastdemo.controllers;
 
 import fr.stack.grosmanginvo.ascastdemo.configurations.Routes;
 import fr.stack.grosmanginvo.ascastdemo.models.ISource;
+import fr.stack.grosmanginvo.ascastdemo.models.MockData;
 import fr.stack.grosmanginvo.ascastdemo.services.AsCastService;
 import jdk.jshell.spi.ExecutionControl;
 import lombok.AllArgsConstructor;
@@ -24,11 +25,10 @@ public class AsCastController {
 
     /**
      * Endpoint called by a node who want the data
-     * TODO: Implement function return a JSON
      */
     @GetMapping(Routes.AS_CAST_DATA)
-    public void getData() {
-        asCastService.getData();
+    public MockData getData() {
+        return asCastService.getData();
     }
 
     /**
