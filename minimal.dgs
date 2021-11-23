@@ -1,0 +1,22 @@
+DGS004
+null 0 0
+an "A"
+cn "A"  "isSource":true
+cn "A"  "ui.label":"A"
+cn "A"  "ui.style":"shape:circle;fill-color: red;size: 30px;"
+an "B"
+cn "B"  "isSource":false
+cn "B"  "ui.label":"B"
+cn "B"  "ui.style":"shape:circle;fill-color: yellow;size: 30px;"
+an "C"
+cn "C"  "isSource":false
+cn "C"  "ui.label":"C"
+cn "C"  "ui.style":"shape:circle;fill-color: yellow;size: 30px;"
+an "D"
+cn "D"  "isSource":true
+cn "D"  "ui.label":"D"
+cn "D"  "ui.style":"shape:circle;fill-color: red;size: 30px;"
+ae "AB" "A"  "B"
+ae "BC" "B"  "C"
+ae "BD" "B"  "D"
+ae "CD" "C"  "D"
