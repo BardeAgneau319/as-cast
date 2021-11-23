@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -49,6 +50,14 @@ public class AsCastService {
                 this.httpService.postAsCastAdd(sourceToSend, neighbor);
             }
         }
+    }
+
+    public Optional<ISource> forwardSource() {
+        if (this.server.getSource() == null) {
+            return Optional.empty();
+        }
+
+        return Optional.of(computeSourceToSend(this.server.getSource()));
     }
 
     boolean isLooping(ISource source) {

@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Optional;
+
 @RestController
 @RequestMapping(Routes.AS_CAST_ROOT)
 @AllArgsConstructor
@@ -18,9 +20,13 @@ public class AsCastController {
 
     private final AsCastService asCastService;
 
+    /**
+     * Endpoint to get the source of the node. Used by neighbor nodes on start-up.
+     * @return
+     */
     @GetMapping(Routes.AS_CAST_SOURCE)
-    public void getSource() {
-        // c'est quoi déjà ?
+    public Optional<ISource> getSource() {
+        return this.asCastService.forwardSource();
     }
 
     /**
