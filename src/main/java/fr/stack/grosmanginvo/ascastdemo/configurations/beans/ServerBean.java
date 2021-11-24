@@ -59,7 +59,7 @@ public class ServerBean {
         Graph graph = new SingleGraph("Minimal Graph");
         FileSourceDGS fs = new FileSourceDGS();
         fs.addSink(graph);
-        fs.readAll("minimal.dgs");
+        fs.readAll("perso.dgs");
         return graph.getNode(id);
     }
 
