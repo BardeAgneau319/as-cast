@@ -1,10 +1,9 @@
 package fr.stack.grosmanginvo.ascastdemo.controllers;
 
 import fr.stack.grosmanginvo.ascastdemo.configurations.Routes;
-import fr.stack.grosmanginvo.ascastdemo.models.ISource;
 import fr.stack.grosmanginvo.ascastdemo.models.MockData;
+import fr.stack.grosmanginvo.ascastdemo.models.Source;
 import fr.stack.grosmanginvo.ascastdemo.services.AsCastService;
-import jdk.jshell.spi.ExecutionControl;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,7 +24,7 @@ public class AsCastController {
      * @return
      */
     @GetMapping(Routes.AS_CAST_SOURCE)
-    public Optional<ISource> getSource() {
+    public Optional<Source> getSource() {
         return this.asCastService.forwardSource();
     }
 
@@ -41,7 +40,7 @@ public class AsCastController {
      * Endpoint called when a source is deleted in the network
      */
     @PostMapping(Routes.AS_CAST_DELL)
-    public void del(ISource source) {
+    public void del(Source source) {
         this.asCastService.receiveDel(source);
     }
 
@@ -49,7 +48,7 @@ public class AsCastController {
      * Endpoint called when a source is added in the network
      */
     @PostMapping(Routes.AS_CAST_ADD)
-    public void add(ISource source) {
+    public void add(Source source) {
         this.asCastService.receiveAdd(source);
     }
 }

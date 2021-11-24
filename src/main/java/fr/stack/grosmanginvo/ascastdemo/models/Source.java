@@ -10,20 +10,18 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Source implements ISource {
-    private INode node;
+public class Source  {
+    private Node node;
     private int distance;
     @Builder.Default
-    private List<INode> path = new ArrayList<>();
+    private List<Node> path = new ArrayList<>();
     private int version;
 
-    @Override
-    public boolean isBetter(ISource other) {
+    public boolean isBetter(Source other) {
         return distance <= other.getDistance();
     }
 
-    @Override
-    public boolean equals(ISource other) {
+    public boolean equals(Source other) {
         return node.getAddress().equals(other.getNode().getAddress());
     }
 }

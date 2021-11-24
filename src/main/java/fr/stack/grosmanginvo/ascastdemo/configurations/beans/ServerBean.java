@@ -23,14 +23,14 @@ import java.util.stream.Collectors;
 @Configuration
 public class ServerBean {
 
-    private IServer server = null;
+    private Server server = null;
     private final Logger logger = Logger.getLogger(ServerBean.class.getName());
 
     @Autowired
     private Environment env;
 
     @Bean("server")
-    public IServer server() throws IOException {
+    public Server server() throws IOException {
         if (server ==null) {
             try {
                 initServer();
@@ -64,7 +64,7 @@ public class ServerBean {
     }
 
     private void initNeighbours(org.graphstream.graph.Node nodeConfig) throws IOException {
-        List<INode> neighbors = nodeConfig.edges().map(e -> {
+        List<Node> neighbors = nodeConfig.edges().map(e -> {
             int id = e.getNode0().getIndex() == this.server.getId() ?
                     e.getNode1().getIndex() :
                     e.getNode0().getIndex();

@@ -11,10 +11,10 @@ import java.util.Optional;
 @AllArgsConstructor
 public class AsCastService {
 
-    private final IServer server;
+    private final Server server;
     private final HttpService httpService;
 
-    public void receiveAdd(ISource sourceAdd) {
+    public void receiveAdd(Source sourceAdd) {
 
         // Detect inconsistency and delete inconsistent message
         // TODO : comprendre deuxième partie condition
@@ -26,14 +26,14 @@ public class AsCastService {
             this.server.updateVersion(sourceAdd);
             this.server.setSource(sourceAdd);
 
-            ISource sourceToSend = computeSourceToSend(sourceAdd);
+            Source sourceToSend = computeSourceToSend(sourceAdd);
             for (var neighbor : this.server.getNeighbors()) {
                 this.httpService.postAsCastAdd(sourceToSend, neighbor);
             }
         } // else do nothing
     }
 
-    public void receiveDel(ISource sourceDel) {
+    public void receiveDel(Source sourceDel) {
         // Current source has been deleted
         // TODO : être sûr première partie condition
         if (server.shouldDel(sourceDel) && !this.isLooping(sourceDel)) {
@@ -45,14 +45,14 @@ public class AsCastService {
             }
         } else if (this.server.getSource() != null) {
             // if current source still exists => use it to fill gap for neighbors
-            ISource sourceToSend = computeSourceToSend(this.server.getSource());
+            Source sourceToSend = computeSourceToSend(this.server.getSource());
             for (var neighbor : this.server.getNeighbors()) {
                 this.httpService.postAsCastAdd(sourceToSend, neighbor);
             }
         }
     }
 
-    public Optional<ISource> forwardSource() {
+    public Optional<Source> forwardSource() {
         if (this.server.getSource() == null) {
             return Optional.empty();
         }
@@ -60,7 +60,7 @@ public class AsCastService {
         return Optional.of(computeSourceToSend(this.server.getSource()));
     }
 
-    boolean isLooping(ISource source) {
+    boolean isLooping(Source source) {
         for (var node : source.getPath()) {
             if (node.getAddress().equals(this.server.getAddress()))
                 return true;
@@ -68,11 +68,11 @@ public class AsCastService {
         return false;
     }
 
-    ISource computeSourceToSend(ISource source) {
-        List<INode> path = source.getPath();
+    Source computeSourceToSend(Source source) {
+        List<Node> path = source.getPath();
         path.add(this.server.toNode());
 
-        ISource sourceToSend = Source.builder()
+        Source sourceToSend = Source.builder()
                 .node(source.getNode())
                 .distance(source.getDistance() + 1)
                 .path(path)
@@ -84,7 +84,7 @@ public class AsCastService {
     // current node becoming a source
     public void edgeUp() {
         this.server.setVersion(this.server.getVersion() + 1);
-        ISource selfSource = Source.builder()
+        Source selfSource = Source.builder()
                 .node(this.server.toNode())
                 .distance(0)
                 .version(this.server.getVersion())
@@ -92,7 +92,7 @@ public class AsCastService {
         this.server.setSource(selfSource);
         this.server.setIsSource(true);
 
-        ISource sourceToSend = computeSourceToSend(selfSource);
+        Source sourceToSend = computeSourceToSend(selfSource);
         for (var neighbor : this.server.getNeighbors()) {
             this.httpService.postAsCastAdd(sourceToSend, neighbor);
         }
@@ -107,7 +107,7 @@ public class AsCastService {
     // simulate fetching data from source
     public MockData getData() {
         if (!this.server.isSource()) {
-            INode nextNode = this.server.getSource().getPath().get(0);
+            Node nextNode = this.server.getSource().getPath().get(0);
             return this.httpService.getAsCastData(nextNode);
         } else {
             return MockData.builder()

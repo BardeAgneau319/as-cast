@@ -5,19 +5,17 @@ import lombok.Builder;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Versions implements IVersions {
+public class Versions {
 
     @Builder.Default
     private Map<String, Integer> lastVersions = new HashMap<>();
 
-    @Override
-    public boolean isStale(ISource incomingSource) {
+    public boolean isStale(Source incomingSource) {
         return lastVersions.containsKey(incomingSource.getNode().getAddress())
                 && lastVersions.get(incomingSource.getNode().getAddress()) > incomingSource.getVersion();
     }
 
-    @Override
-    public void update(ISource incomingSource) {
+    public void update(Source incomingSource) {
         lastVersions.put(incomingSource.getNode().getAddress(), incomingSource.getVersion());
     }
 }

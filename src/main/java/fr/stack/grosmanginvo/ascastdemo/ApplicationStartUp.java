@@ -1,6 +1,6 @@
 package fr.stack.grosmanginvo.ascastdemo;
 
-import fr.stack.grosmanginvo.ascastdemo.models.IServer;
+import fr.stack.grosmanginvo.ascastdemo.models.Server;
 import fr.stack.grosmanginvo.ascastdemo.services.AsCastService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationListener;
@@ -18,7 +18,7 @@ import java.util.logging.Logger;
 @RequiredArgsConstructor
 public class ApplicationStartUp implements ApplicationListener<ContextRefreshedEvent> {
 
-    private final IServer server;
+    private final Server server;
 
     private final AsCastService asCastService;
 
