@@ -21,12 +21,7 @@ public class HttpService {
 
     public void postAsCastAdd(Source source, Node target) {
         String url = target.getAddress() + Routes.AS_CAST_ROOT + Routes.AS_CAST_ADD;
-
-        Map<String, Object> parameters = new HashMap<>();
-        parameters.put("source", source);
-
-        HttpEntity<Map<String, Object>> entity = new HttpEntity<>(parameters);
-        ResponseEntity<Void> response = this.restTemplate.postForEntity(url, entity, void.class);
+        this.restTemplate.postForObject(url, source, void.class);
     }
 
     public void postAsCastDel(Source source, Node target) {

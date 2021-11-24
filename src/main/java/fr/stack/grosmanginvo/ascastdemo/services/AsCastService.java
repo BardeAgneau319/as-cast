@@ -4,6 +4,7 @@ import fr.stack.grosmanginvo.ascastdemo.models.*;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
@@ -69,8 +70,8 @@ public class AsCastService {
     }
 
     Source computeSourceToSend(Source source) {
-        List<Node> path = source.getPath();
-        path.add(this.server.toNode());
+        List<Node> path = new LinkedList<>(source.getPath());
+        path.add(0, this.server.toNode());
 
         Source sourceToSend = Source.builder()
                 .node(source.getNode())

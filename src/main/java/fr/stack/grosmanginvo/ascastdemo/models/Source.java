@@ -18,6 +18,9 @@ public class Source  {
     private int version;
 
     public boolean isBetter(Source other) {
+        if (other == null) {
+            return true;
+        }
         return distance <= other.getDistance();
     }
 
