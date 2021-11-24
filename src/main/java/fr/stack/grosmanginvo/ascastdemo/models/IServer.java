@@ -4,6 +4,10 @@ import java.util.List;
 
 public interface IServer {
 
+    int getId();
+
+    void setId(int id);
+
     public void setSource(ISource source);
 
     public ISource getSource();

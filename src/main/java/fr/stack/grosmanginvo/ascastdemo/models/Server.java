@@ -12,6 +12,7 @@ import java.util.List;
 @Builder
 public class Server implements IServer {
 
+    private int id;
     private ISource source;
     @Builder.Default
     private List<INode> neighbors = new ArrayList<>();
@@ -21,6 +22,16 @@ public class Server implements IServer {
     private IVersions versions = new Versions();
     @Builder.Default
     private int version = 0;
+
+    @Override
+    public int getId() {
+        return id;
+    }
+
+    @Override
+    public void setId(int id) {
+        this.id = id;
+    }
 
     @Override
     public void setSource(ISource source) {

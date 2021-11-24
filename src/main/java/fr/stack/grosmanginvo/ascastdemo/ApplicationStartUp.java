@@ -22,7 +22,7 @@ public class ApplicationStartUp implements ApplicationListener<ContextRefreshedE
 
     private final AsCastService asCastService;
 
-    private Logger logger = Logger.getLogger(ApplicationStartUp.class.getName());
+    private final Logger logger = Logger.getLogger(ApplicationStartUp.class.getName());
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
