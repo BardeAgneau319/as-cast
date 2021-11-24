@@ -45,23 +45,26 @@ public class ServerBean {
 
     private void initServer() throws IOException {
         int id = Integer.parseInt(Objects.requireNonNull(env.getProperty("NODE_ID")));
+        var nodeConfig = this.readGraphFile(id);
+
         this.server = Server.builder()
                 .id(id)
                 .address(this.computeAddress(id))
-                .isSource(env.getProperty("IS_SOURCE", Boolean.TYPE, false))
+                .isSource(nodeConfig.getAttribute("isSource", Boolean.class))
                 .build();
-        this.initNeighbours();
+        this.initNeighbours(nodeConfig);
     }
 
-    private void initNeighbours() throws IOException {
-        System.setProperty("org.graphstream.ui", "swing");
+    private org.graphstream.graph.Node readGraphFile(int id) throws IOException  {
         Graph graph = new SingleGraph("Minimal Graph");
         FileSourceDGS fs = new FileSourceDGS();
         fs.addSink(graph);
         fs.readAll("minimal.dgs");
-        var edges = graph.getNode(server.getId()).edges();
+        return graph.getNode(id);
+    }
 
-        List<INode> neighbors = edges.map(e -> {
+    private void initNeighbours(org.graphstream.graph.Node nodeConfig) throws IOException {
+        List<INode> neighbors = nodeConfig.edges().map(e -> {
             int id = e.getNode0().getIndex() == this.server.getId() ?
                     e.getNode1().getIndex() :
                     e.getNode0().getIndex();
