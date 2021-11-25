@@ -26,10 +26,17 @@ public class ApplicationStartUp implements ApplicationListener<ContextRefreshedE
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
-        this.logger.log(Level.INFO, "Start-up component");
+        this.logger.log(Level.FINE, "Executing start-up component");
         if (this.server.isSource()) {
-            this.logger.log(Level.INFO, "Edge up!");
+            this.logger.log(Level.FINE, "This node is a source.");
+            this.logger.log(Level.FINE, "Sending add event to every neighbour.");
             this.asCastService.edgeUp();
+        } else {
+            this.logger.log(Level.FINE, "This node is not a source.");
+            try {
+                Thread.sleep(10000);
+            } catch (InterruptedException ignored) { }
+            this.asCastService.fetchSourceUntilSuccess();
         }
     }
 }

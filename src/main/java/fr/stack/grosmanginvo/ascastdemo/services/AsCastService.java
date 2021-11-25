@@ -3,10 +3,13 @@ package fr.stack.grosmanginvo.ascastdemo.services;
 import fr.stack.grosmanginvo.ascastdemo.models.*;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestClientException;
 
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 @Service
 @AllArgsConstructor
@@ -14,6 +17,7 @@ public class AsCastService {
 
     private final Server server;
     private final HttpService httpService;
+    private final Logger logger = Logger.getLogger(AsCastService.class.getName());
 
     public void receiveAdd(Source sourceAdd) {
 
@@ -127,5 +131,33 @@ public class AsCastService {
 
     public Source getSource() {
         return this.server.getSource();
+    }
+
+    @SuppressWarnings("BusyWait")
+    public void fetchSourceUntilSuccess() {
+        this.logger.log(Level.FINE, "Trying to fetch a source every 10 seconds if no add-event is received.");
+        while (this.server.getSource() == null) {
+            this.fetchSource();
+
+            if (this.server.getSource() != null) break;
+
+            try {
+                Thread.sleep(10000);
+            } catch (InterruptedException ignored) { }
+        }
+        logger.log(Level.INFO, String.format("Source fetched : %s", this.server.getSource().getNode().getAddress()));
+    }
+
+    private void fetchSource () {
+        for (var neighbor : this.server.getNeighbors()) {
+            try {
+                var source = this.httpService.getAsCastSource(neighbor);
+                if (source != null) {
+                    this.receiveAdd(source);
+                }
+            } catch (RestClientException e) {
+                logger.log(Level.SEVERE, String.format("Failed to get source from %s", neighbor.getAddress()), e);
+            }
+        }
     }
 }

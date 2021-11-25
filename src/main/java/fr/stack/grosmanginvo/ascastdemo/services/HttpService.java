@@ -8,30 +8,48 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestClientException;
+import org.springframework.web.client.RestClientResponseException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 @Service
 @AllArgsConstructor
 public class HttpService {
 
     private final RestTemplate restTemplate;
+    private final Logger logger = Logger.getLogger(HttpService.class.getName());
 
     public void postAsCastAdd(Source source, Node target) {
         String url = target.getAddress() + Routes.AS_CAST_ROOT + Routes.AS_CAST_ADD;
-        this.restTemplate.postForObject(url, source, void.class);
+        try {
+            this.restTemplate.postForObject(url, source, void.class);
+        } catch (RestClientException e) {
+            logger.log(Level.SEVERE, String.format("Failed to execute request POST %s", url), e);
+        }
     }
 
     public void postAsCastDel(Source source, Node target) {
         String url = target.getAddress() + Routes.AS_CAST_ROOT + Routes.AS_CAST_DELL;
-        this.restTemplate.postForObject(url, source, void.class);
+        try {
+            this.restTemplate.postForObject(url, source, void.class);
+        } catch (RestClientException e) {
+            logger.log(Level.SEVERE, String.format("Failed to execute request POST %s", url), e);
+        }
     }
 
 
     public MockData getAsCastData(Node target) {
         String url = target.getAddress() + Routes.AS_CAST_ROOT + Routes.AS_CAST_DATA;
         return this.restTemplate.getForObject(url, MockData.class);
+    }
+
+    public Source getAsCastSource(Node target) {
+        String url = target.getAddress() + Routes.AS_CAST_ROOT + Routes.AS_CAST_SOURCE;
+        return this.restTemplate.getForObject(url, Source.class);
     }
 }
