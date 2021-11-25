@@ -1,5 +1,6 @@
 package fr.stack.grosmanginvo.ascastdemo.controllers;
 
+import fr.stack.grosmanginvo.ascastdemo.models.Source;
 import fr.stack.grosmanginvo.ascastdemo.services.AsCastService;
 import jdk.jshell.spi.ExecutionControl;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +12,11 @@ import org.springframework.web.bind.annotation.*;
 public class AdminController {
 
     private final AsCastService asCastService;
+
+    @GetMapping("/source")
+    public Source getSource() {
+        return asCastService.getSource();
+    }
 
     @PostMapping("/source")
     public void addSource() {
@@ -33,7 +39,7 @@ public class AdminController {
     }
 
     @GetMapping("is-source")
-    public boolean isSource() throws ExecutionControl.NotImplementedException {
-        throw new ExecutionControl.NotImplementedException("Not implemented");
+    public boolean isSource() {
+        return asCastService.isSource();
     }
 }

@@ -21,7 +21,7 @@ public class Source  {
         if (other == null) {
             return true;
         }
-        return distance <= other.getDistance();
+        return distance < other.getDistance();
     }
 
     public boolean equals(Source other) {

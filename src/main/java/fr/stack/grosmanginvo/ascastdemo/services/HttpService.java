@@ -26,20 +26,12 @@ public class HttpService {
 
     public void postAsCastDel(Source source, Node target) {
         String url = target.getAddress() + Routes.AS_CAST_ROOT + Routes.AS_CAST_DELL;
-
-        Map<String, Object> parameters = new HashMap<>();
-        parameters.put("source", source);
-
-        HttpEntity<Map<String, Object>> entity = new HttpEntity<>(parameters);
-        ResponseEntity<Void> response = this.restTemplate.postForEntity(url, entity, void.class);
+        this.restTemplate.postForObject(url, source, void.class);
     }
 
 
     public MockData getAsCastData(Node target) {
         String url = target.getAddress() + Routes.AS_CAST_ROOT + Routes.AS_CAST_DATA;
-
-        ResponseEntity<MockData> response = this.restTemplate.getForEntity(url, MockData.class);
-
-        return response.getBody();
+        return this.restTemplate.getForObject(url, MockData.class);
     }
 }

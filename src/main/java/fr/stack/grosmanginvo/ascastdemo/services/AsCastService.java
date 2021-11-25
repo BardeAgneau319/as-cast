@@ -109,12 +109,23 @@ public class AsCastService {
     public MockData getData() {
         if (!this.server.isSource()) {
             Node nextNode = this.server.getSource().getPath().get(0);
-            return this.httpService.getAsCastData(nextNode);
+            MockData data = this.httpService.getAsCastData(nextNode);
+            data.getPath().add(this.server.getAddress());
+            return data;
         } else {
             return MockData.builder()
-                    .address(this.server.getAddress())
-                    .someField(String.format("This is some data coming from node %s", this.server.getAddress()))
+                    .source(this.server.getAddress())
+                    .path(List.of(this.server.getAddress()))
+                    .text(String.format("This is some data coming from node %s", this.server.getAddress()))
                     .build();
         }
+    }
+
+    public boolean isSource() {
+        return this.server.isSource();
+    }
+
+    public Source getSource() {
+        return this.server.getSource();
     }
 }
