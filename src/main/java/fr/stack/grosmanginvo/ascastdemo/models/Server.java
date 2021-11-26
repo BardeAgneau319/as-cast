@@ -64,7 +64,7 @@ public class Server {
     }
 
     public boolean shouldDel(Source incomingSource) {
-        return this.source.equals(incomingSource) && this.source.getVersion() < incomingSource.getVersion();
+        return this.source != null && this.source.equals(incomingSource) && this.source.getVersion() < incomingSource.getVersion();
     }
 
     public Node toNode() {

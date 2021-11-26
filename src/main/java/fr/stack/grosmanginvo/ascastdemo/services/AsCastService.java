@@ -106,7 +106,14 @@ public class AsCastService {
     // current node stop being a source
     public void edgeDown() {
         this.server.setVersion(this.server.getVersion() + 1);
-        this.receiveDel(this.server.getSource());
+        Source source = Source.builder()
+                .node(this.server.getSource().getNode())
+                .distance(this.server.getSource().getDistance())
+                .path(this.server.getSource().getPath())
+                .version(this.server.getVersion())
+                .build();
+        source.setVersion(this.server.getVersion());
+        this.receiveDel(source);
     }
 
     // simulate fetching data from source
