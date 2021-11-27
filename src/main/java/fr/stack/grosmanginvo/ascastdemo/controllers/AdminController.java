@@ -6,12 +6,16 @@ import jdk.jshell.spi.ExecutionControl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 @RestController
 @RequestMapping("/admin")
 @RequiredArgsConstructor
 public class AdminController {
 
     private final AsCastService asCastService;
+    private final Logger logger = Logger.getLogger(AsCastService.class.getName());
 
     @GetMapping("/source")
     public Source getSource() {
@@ -20,11 +24,13 @@ public class AdminController {
 
     @PostMapping("/source")
     public void addSource() {
+        this.logger.log(Level.INFO, "Enabling source");
         asCastService.edgeUp();
     }
 
     @DeleteMapping("/source")
     public void deleteSource() {
+        this.logger.log(Level.INFO, "Disabling source");
         asCastService.edgeDown();
     }
 

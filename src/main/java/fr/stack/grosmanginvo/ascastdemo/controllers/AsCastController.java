@@ -8,6 +8,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 @RestController
 @RequestMapping(Routes.AS_CAST_ROOT)
@@ -15,6 +17,7 @@ import java.util.Optional;
 public class AsCastController {
 
     private final AsCastService asCastService;
+    private final Logger logger = Logger.getLogger(AsCastService.class.getName());
 
     /**
      * Endpoint to get the source of the node. Used by neighbor nodes on start-up.
@@ -38,6 +41,7 @@ public class AsCastController {
      */
     @PostMapping(Routes.AS_CAST_DELL)
     public void del(@RequestBody Source source) {
+        this.logger.log(Level.INFO, "Received DEL message from " + source.getPath().get(0).getAddress());
         this.asCastService.receiveDel(source);
     }
 
@@ -46,6 +50,7 @@ public class AsCastController {
      */
     @PostMapping(Routes.AS_CAST_ADD)
     public void add(@RequestBody Source source) {
+        this.logger.log(Level.INFO, "Received ADD message from " + source.getPath().get(0).getAddress());
         this.asCastService.receiveAdd(source);
     }
 }

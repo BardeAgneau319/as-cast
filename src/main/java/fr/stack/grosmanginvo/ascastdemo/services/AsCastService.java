@@ -25,9 +25,11 @@ public class AsCastService {
         // TODO : comprendre deuxième partie condition
         if (this.server.isStale(sourceAdd)) {
             // Resolve inconsistency and propagate fix
+            this.logger.log(Level.INFO, "Outdated ADD message received from " + sourceAdd.getNode().getAddress());
             this.receiveDel(sourceAdd);
         } else if (!this.isLooping(sourceAdd) && sourceAdd.isBetter(server.getSource())) {
             // Better source received
+            this.logger.log(Level.INFO, "Source updated from ADD to " + sourceAdd.getNode().getAddress());
             this.server.updateVersion(sourceAdd);
             this.server.setSource(sourceAdd);
 
@@ -42,14 +44,17 @@ public class AsCastService {
         // Current source has been deleted
         // TODO : être sûr première partie condition
         if (server.shouldDel(sourceDel) && !this.isLooping(sourceDel)) {
+            this.logger.log(Level.INFO, "Source updated from DEL to none");
             this.server.updateVersion(sourceDel);
             this.server.setSource(null);
 
+            Source sourceToSend = computeSourceToSend(sourceDel);
             for (var neighbor : this.server.getNeighbors()) {
-                this.httpService.postAsCastDel(sourceDel, neighbor);
+                this.httpService.postAsCastDel(sourceToSend, neighbor);
             }
         } else if (this.server.getSource() != null) {
             // if current source still exists => use it to fill gap for neighbors
+            this.logger.log(Level.INFO, "Forwarding current source to neighbors");
             Source sourceToSend = computeSourceToSend(this.server.getSource());
             for (var neighbor : this.server.getNeighbors()) {
                 this.httpService.postAsCastAdd(sourceToSend, neighbor);
@@ -112,7 +117,6 @@ public class AsCastService {
                 .path(this.server.getSource().getPath())
                 .version(this.server.getVersion())
                 .build();
-        source.setVersion(this.server.getVersion());
         this.receiveDel(source);
     }
 
