@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<graphml xmlns="http://graphml.graphdrawing.org/xmlns"
+	 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	 xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns
+	   http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">
+	<key id="attr0000" for="node" attr.name="isSource" attr.type="boolean"/>
+	<key id="attr0001" for="node" attr.name="ui.label" attr.type="string"/>
+	<key id="attr0002" for="node" attr.name="ui.style" attr.type="string"/>
+	<graph id="Minimal Graph" edgedefault="undirected">
+		<node id="A">
+			<data key="attr0000">true</data>
+			<data key="attr0001">A</data>
+			<data key="attr0002">shape:circle;fill-color: red;size: 30px;</data>
+		</node>
+		<node id="B">
+			<data key="attr0000">false</data>
+			<data key="attr0001">B</data>
+			<data key="attr0002">shape:circle;fill-color: yellow;size: 30px;</data>
+		</node>
+		<node id="C">
+			<data key="attr0000">false</data>
+			<data key="attr0001">C</data>
+			<data key="attr0002">shape:circle;fill-color: yellow;size: 30px;</data>
+		</node>
+		<node id="D">
+			<data key="attr0000">true</data>
+			<data key="attr0001">D</data>
+			<data key="attr0002">shape:circle;fill-color: red;size: 30px;</data>
+		</node>
+		<edge id="AB" source="A" target="B" directed="false">
+		</edge>
+		<edge id="BC" source="B" target="C" directed="false">
+		</edge>
+		<edge id="BD" source="B" target="D" directed="false">
+		</edge>
+		<edge id="CD" source="C" target="D" directed="false">
+		</edge>
+	</graph>
+</graphml>

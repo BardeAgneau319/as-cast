@@ -5,6 +5,7 @@ import lombok.SneakyThrows;
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.implementations.SingleGraph;
 import org.graphstream.stream.file.FileSourceDGS;
+import org.graphstream.stream.file.FileSourceGraphML;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -57,9 +58,9 @@ public class ServerBean {
 
     private org.graphstream.graph.Node readGraphFile(int id) throws IOException  {
         Graph graph = new SingleGraph("Minimal Graph");
-        FileSourceDGS fs = new FileSourceDGS();
+        FileSourceGraphML fs = new FileSourceGraphML();
         fs.addSink(graph);
-        fs.readAll("perso.dgs");
+        fs.readAll("perso.xml");
         return graph.getNode(id);
     }
 

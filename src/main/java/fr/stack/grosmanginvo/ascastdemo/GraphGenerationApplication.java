@@ -4,7 +4,7 @@ import lombok.SneakyThrows;
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.SingleGraph;
-import org.graphstream.stream.file.FileSinkDGS;
+import org.graphstream.stream.file.FileSinkGraphML;
 
 /**
  * Generates a topology file
@@ -27,9 +27,9 @@ public class GraphGenerationApplication {
         graph.addEdge("BC", "B", "C");
         graph.addEdge("BD", "B", "D");
         graph.addEdge("CD", "C", "D");
-        FileSinkDGS fs = new FileSinkDGS();
-        fs.writeAll(graph, "minimal.dgs");
-         */
+        FileSinkGraphML fs = new FileSinkGraphML();
+        fs.writeAll(graph, "minimal.xml");
+        */
 
         // Graph perso avec une seule source
         addNode(graph, "A", true);
@@ -40,8 +40,8 @@ public class GraphGenerationApplication {
         graph.addEdge("BC", "B", "C");
         graph.addEdge("BD", "B", "D");
         graph.addEdge("CD", "C", "D");
-        FileSinkDGS fs = new FileSinkDGS();
-        fs.writeAll(graph, "perso.dgs");
+        FileSinkGraphML fs = new FileSinkGraphML();
+        fs.writeAll(graph, "perso.xml");
     }
 
     private static void addNode(Graph graph, String key, Boolean isSource) {

@@ -12,9 +12,9 @@ public class GraphApplication {
         System.setProperty("org.graphstream.ui", "swing");
 
         Graph graph = new SingleGraph("Minimal Graph");
-        FileSourceDGS fs = new FileSourceDGS();
+        FileSourceGraphML fs = new FileSourceGraphML();
         fs.addSink(graph);
-        fs.readAll("minimal.dgs");
+        fs.readAll("minimal.xml");
         graph.display();
     }
 }
