@@ -30,7 +30,7 @@ public class ApplicationStartUp implements ApplicationListener<ContextRefreshedE
         if (this.server.isSource()) {
             this.logger.log(Level.FINE, "This node is a source.");
             this.logger.log(Level.FINE, "Sending add event to every neighbour.");
-            this.asCastService.edgeUp();
+            this.asCastService.setAsSource();
         } else {
             this.logger.log(Level.FINE, "This node is not a source.");
             try {

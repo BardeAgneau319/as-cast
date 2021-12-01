@@ -7,6 +7,7 @@ import org.springframework.web.client.RestClientException;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -92,7 +93,7 @@ public class AsCastService {
     }
 
     // current node becoming a source
-    public void edgeUp() {
+    public void setAsSource() {
         this.server.setVersion(this.server.getVersion() + 1);
         Source selfSource = Source.builder()
                 .node(this.server.toNode())
@@ -109,7 +110,11 @@ public class AsCastService {
     }
 
     // current node stop being a source
-    public void edgeDown() {
+    public void unsetAsSource() {
+        if (!this.server.isSource()) {
+            this.logger.log(Level.WARNING, "Unable to unset this server as a source since it is already not a source.");
+            return;
+        }
         this.server.setVersion(this.server.getVersion() + 1);
         Source source = Source.builder()
                 .node(this.server.getSource().getNode())
@@ -118,6 +123,42 @@ public class AsCastService {
                 .version(this.server.getVersion())
                 .build();
         this.receiveDel(source);
+    }
+
+    /**
+     * Adds the node to the list of neighbors and send it the current source if any.
+     * @param neighbor The node to add to the list of neighbors
+     */
+    public void edgeUp(Node neighbor) {
+        if (this.server.getNeighbors().contains(neighbor) || neighbor.equals(this.server.toNode())) {
+            return;
+        }
+        this.server.getNeighbors().add(neighbor);
+        if (this.getSource() != null) {
+            var sourceToSend = this.computeSourceToSend(this.getSource());
+            this.httpService.postAsCastAdd(sourceToSend, neighbor);
+        }
+        this.httpService.postAdminNeighbor(this.server.toNode(), neighbor);
+    }
+
+    /**
+     * Remove the node from the list of neighbors and spread a delete message if the removed node is the first step
+     * on the path to the source.
+     * @param neighbor The node to remove from the list of neighbors.
+     */
+    public void edgeDown(Node neighbor) {
+        if (!this.server.getNeighbors().contains(neighbor) || neighbor.equals(this.server.toNode())) {
+            return;
+        }
+        this.server.getNeighbors().remove(neighbor);
+        if (this.server.getSource() != null &&
+                this.server.getSource().getPath().size() > 0 &&
+                Objects.equals(this.server.getSource().getPath().get(0), neighbor)) {
+            var sourceToDel = this.server.getSource().clone();
+            sourceToDel.setVersion(sourceToDel.getVersion() + 1);
+            this.receiveDel(sourceToDel);
+        }
+        this.httpService.deleteAdminNeighbor(8080 + this.server.getId(), neighbor);
     }
 
     // simulate fetching data from source
@@ -170,5 +211,9 @@ public class AsCastService {
                 logger.log(Level.SEVERE, String.format("Failed to get source from %s", neighbor.getAddress()), e);
             }
         }
+    }
+
+    public List<Node> getNeighbors() {
+        return this.server.getNeighbors();
     }
 }

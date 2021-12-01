@@ -52,4 +52,15 @@ public class HttpService {
         String url = target.getAddress() + Routes.AS_CAST_ROOT + Routes.AS_CAST_SOURCE;
         return this.restTemplate.getForObject(url, Source.class);
     }
+
+
+    public void postAdminNeighbor(Node neighbor, Node target) {
+        String url = target.getAddress() + Routes.ADMIN_ROOT + Routes.ADMIN_NEIGHBORS;
+        this.restTemplate.postForObject(url, neighbor, void.class);
+    }
+
+    public void deleteAdminNeighbor(int neighborPort, Node target) {
+        String url = String.format("%s%s%s/%d", target.getAddress(), Routes.ADMIN_ROOT, Routes.ADMIN_NEIGHBORS, neighborPort);
+        this.restTemplate.delete(url, void.class);
+    }
 }

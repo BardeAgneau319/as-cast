@@ -1,14 +1,21 @@
 package fr.stack.grosmanginvo.ascastdemo.models;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Node {
+@EqualsAndHashCode
+public class Node implements Cloneable{
     private String address;
+
+    @Override
+    public Node clone() {
+        try {
+            return (Node) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
+        }
+    }
 }
