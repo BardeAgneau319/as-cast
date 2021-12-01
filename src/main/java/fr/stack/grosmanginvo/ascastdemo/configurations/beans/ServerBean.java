@@ -47,12 +47,13 @@ public class ServerBean {
     private void initServer() throws IOException {
         int id = Integer.parseInt(Objects.requireNonNull(env.getProperty("NODE_ID")));
         var nodeConfig = this.readGraphFile(id);
+        boolean isSource = nodeConfig.getAttribute("isSource", Boolean.class);
 
         this.server = Server.builder()
                 .id(id)
                 .address(this.computeAddress(id))
-                .isSource(nodeConfig.getAttribute("isSource", Boolean.class))
                 .build();
+        this.initSource(isSource);
         this.initNeighbours(nodeConfig);
     }
 
@@ -74,6 +75,19 @@ public class ServerBean {
         }).collect(Collectors.toList());
 
         this.server.setNeighbors(neighbors);
+    }
+
+    private void initSource(boolean isSource) {
+        Source source = null;
+        if (isSource) {
+            Node node = this.server.toNode();
+            source = Source.builder()
+                    .node(node)
+                    .path(List.of())
+                    .version(this.server.getVersion())
+                    .build();
+        }
+        this.server.setSource(source);
     }
 
     private String computeAddress(int nodeId) {

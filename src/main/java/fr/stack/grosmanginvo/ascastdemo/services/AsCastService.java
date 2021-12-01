@@ -85,7 +85,6 @@ public class AsCastService {
 
         Source sourceToSend = Source.builder()
                 .node(source.getNode())
-                .distance(source.getDistance() + 1)
                 .path(path)
                 .version(source.getVersion())
                 .build();
@@ -95,13 +94,13 @@ public class AsCastService {
     // current node becoming a source
     public void setAsSource() {
         this.server.setVersion(this.server.getVersion() + 1);
+        Node node = this.server.toNode();
         Source selfSource = Source.builder()
-                .node(this.server.toNode())
-                .distance(0)
+                .node(node)
+                .path(List.of())
                 .version(this.server.getVersion())
                 .build();
         this.server.setSource(selfSource);
-        this.server.setIsSource(true);
 
         Source sourceToSend = computeSourceToSend(selfSource);
         for (var neighbor : this.server.getNeighbors()) {
@@ -116,14 +115,9 @@ public class AsCastService {
             return;
         }
         this.server.setVersion(this.server.getVersion() + 1);
-        this.server.setIsSource(false);
-        Source source = Source.builder()
-                .node(this.server.getSource().getNode())
-                .distance(this.server.getSource().getDistance())
-                .path(this.server.getSource().getPath())
-                .version(this.server.getVersion())
-                .build();
-        this.receiveDel(source);
+        Source sourceToDel = this.server.getSource().clone();
+        sourceToDel.setVersion(this.server.getVersion());
+        this.receiveDel(sourceToDel);
     }
 
     /**
@@ -155,8 +149,9 @@ public class AsCastService {
         if (this.server.getSource() != null &&
                 this.server.getSource().getPath().size() > 0 &&
                 Objects.equals(this.server.getSource().getPath().get(0), neighbor)) {
+            this.server.setVersion(this.server.getVersion() + 1);
             var sourceToDel = this.server.getSource().clone();
-            sourceToDel.setVersion(sourceToDel.getVersion() + 1);
+            sourceToDel.setVersion(this.server.getVersion());
             this.receiveDel(sourceToDel);
         }
         this.httpService.deleteAdminNeighbor(8080 + this.server.getId(), neighbor);

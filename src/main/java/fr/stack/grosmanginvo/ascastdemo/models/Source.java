@@ -13,20 +13,26 @@ import java.util.List;
 @Builder
 public class Source implements Cloneable {
     private Node node;
-    private int distance;
     @Builder.Default
     private List<Node> path = new ArrayList<>();
     private int version;
+
+    public Node getFirstStep() {
+        if (this.path.size() == 0) {
+            return null;
+        }
+        return this.getPath().get(0);
+    }
+
+    public int getDistance() {
+        return this.path.size();
+    }
 
     public boolean isBetter(Source other) {
         if (other == null) {
             return true;
         }
-        return distance < other.getDistance();
-    }
-
-    public boolean equals(Source other) {
-        return node.getAddress().equals(other.getNode().getAddress());
+        return getDistance() < other.getDistance();
     }
 
     @Override
