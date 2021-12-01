@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -16,7 +17,6 @@ public class Server {
     private Source source;
     @Builder.Default
     private List<Node> neighbors = new ArrayList<>();
-    private boolean isSource;
     private String address;
     @Builder.Default
     private Versions versions = new Versions();
@@ -45,10 +45,7 @@ public class Server {
     }
 
     public boolean isSource() {
-        return isSource;
-    }
-    public void setIsSource(boolean isSource) {
-        this.isSource = isSource;
+        return this.source != null && this.source.getNode().equals(this.toNode());
     }
 
     public String getAddress() {
@@ -64,7 +61,9 @@ public class Server {
     }
 
     public boolean shouldDel(Source incomingSource) {
-        return this.source != null && this.source.equals(incomingSource) && this.source.getVersion() < incomingSource.getVersion();
+        return this.source != null
+                && Objects.equals(this.source.getFirstStep(), incomingSource.getFirstStep())
+                && this.source.getVersion() < incomingSource.getVersion();
     }
 
     public Node toNode() {
