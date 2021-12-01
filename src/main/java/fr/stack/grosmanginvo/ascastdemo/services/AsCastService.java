@@ -116,6 +116,7 @@ public class AsCastService {
             return;
         }
         this.server.setVersion(this.server.getVersion() + 1);
+        this.server.setIsSource(false);
         Source source = Source.builder()
                 .node(this.server.getSource().getNode())
                 .distance(this.server.getSource().getDistance())
