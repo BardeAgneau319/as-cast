@@ -8,6 +8,10 @@ This project aims at implementing the AS-cast partitioning protocol and testing 
 
 ## Getting started
 TODO
+virtualenv venv
+pip install -r requirements.txt
+python launch --topology=[topology]
+pytest [test_file]
 
 ## Modules
 
