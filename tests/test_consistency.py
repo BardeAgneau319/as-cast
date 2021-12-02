@@ -42,8 +42,9 @@ class TestConsistency:
         assert r.status_code == 200
         sleep(5)
         for node, data in graph.nodes(data=True):
-            r = requests.get(to_url(node) + "/admin/source")
-            assert not r.json()
+            if data['isNode']:
+                r = requests.get(to_url(node) + "/admin/source")
+                assert not r.text
     
     def test_two_adds_and_deletes(self, graph):
         r = requests.post(to_url("A") + "/admin/source")
@@ -54,9 +55,10 @@ class TestConsistency:
         assert r.status_code == 200
         r = requests.delete(to_url("D") + "/admin/source")
         assert r.status_code == 200
-        sleep(5)
+        sleep(10)
         for node, data in graph.nodes(data=True):
-            r = requests.get(to_url(node) + "/admin/source")
-            assert not r.json()
+            if data['isNode']:
+                r = requests.get(to_url(node) + "/admin/source")
+                assert not r.text
     
 

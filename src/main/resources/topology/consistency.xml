@@ -27,7 +27,7 @@
 			<data key="attr0003">shape:circle;fill-color: yellow;size: 30px;</data>
 		</node>
 		<node id="D">
-			<data key="attr0000">false</data>
+			<data key="attr0000">true</data>
 			<data key="attr0001">true</data>
 			<data key="attr0002">D</data>
 			<data key="attr0003">shape:circle;fill-color: yellow;size: 30px;</data>

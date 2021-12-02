@@ -14,7 +14,7 @@ public class GraphApplication {
         Graph graph = new SingleGraph("Minimal Graph");
         FileSourceGraphML fs = new FileSourceGraphML();
         fs.addSink(graph);
-        fs.readAll("consistency.xml");
+        fs.readAll("src/main/resources/topology/consistency.xml");
         graph.display();
     }
 }
