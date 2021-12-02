@@ -1,13 +1,14 @@
 {
   "properties": [
     {
-      "name": "IS_SOURCE",
+      "name": "TOPOLOGY_FILE",
       "type": "java.lang.String",
-      "description": "Description for IS_SOURCE."
+      "description": "Path to the XML topology file in 'resources' folder.",
+      "defaultValue": D
     },
     {
-      "name": "IS_SOURCE",
+      "name": "NODE_ID",
       "type": "java.lang.String",
-      "description": "Description for IS_SOURCE."
+      "description": "ID corresponding to the server configuration in the topology file."
     }
   ] }

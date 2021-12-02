@@ -1,17 +1,17 @@
 package fr.stack.grosmanginvo.ascastdemo.configurations.beans;
 
 import fr.stack.grosmanginvo.ascastdemo.models.*;
-import lombok.SneakyThrows;
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.implementations.SingleGraph;
-import org.graphstream.stream.file.FileSourceDGS;
 import org.graphstream.stream.file.FileSourceGraphML;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
+import org.springframework.core.io.ClassPathResource;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 import java.util.Objects;
 import java.util.logging.Level;
@@ -45,7 +45,7 @@ public class ServerBean {
     }
 
     private void initServer() throws IOException {
-        int id = Integer.parseInt(Objects.requireNonNull(env.getProperty("NODE_ID")));
+        int id = Integer.parseInt(Objects.requireNonNull(env.getProperty("nodeId")));
         var nodeConfig = this.readGraphFile(id);
         boolean isSource = nodeConfig.getAttribute("isSource", Boolean.class);
 
@@ -58,10 +58,14 @@ public class ServerBean {
     }
 
     private org.graphstream.graph.Node readGraphFile(int id) throws IOException  {
+        String topologyFilePath = this.env.getProperty("topologyFile");
+        assert topologyFilePath != null;
+        InputStream topologyStream = new ClassPathResource(topologyFilePath).getInputStream();
         Graph graph = new SingleGraph("Minimal Graph");
         FileSourceGraphML fs = new FileSourceGraphML();
         fs.addSink(graph);
-        fs.readAll("perso.xml");
+        fs.readAll(topologyStream);
+        topologyStream.close();
         return graph.getNode(id);
     }
 
