@@ -1,15 +1,15 @@
 import networkx as nx
 import pytest
 import requests
-from string import ascii_uppercase
 from time import sleep
 
+from utils import to_url, wait_for_node, TOPOLOGY_PATH
 
 class TestBasics:
 
     @pytest.fixture
     def graph(self):
-        return nx.read_graphml("../perso.xml")
+        return nx.read_graphml(TOPOLOGY_PATH + "/perso.xml")
 
     def test_initialization(self, graph):
         for node, data in graph.nodes(data=True):
@@ -54,22 +54,3 @@ class TestBasics:
             r = requests.get(to_url(neighbor) + "/admin/source")
             r = r.json()
             assert r.get('node').get('address') == to_url("D")
-
-
-LETTERS = {letter: index for index,
-           letter in enumerate(ascii_uppercase, start=1)}
-
-
-def letter_to_number(letter):
-    return LETTERS[letter] - 1
-
-
-def to_url(node):
-    return "http://localhost:" + str(8080 + letter_to_number(node))
-
-def wait_for_node(node):
-    while True:
-        r = requests.get(to_url(node) + "/admin/source")
-        if r.json():
-            return
-        sleep(0.5)
