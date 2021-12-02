@@ -7,6 +7,9 @@ from utils import to_url, wait_for_node, TOPOLOGY_PATH
 
 
 class TestConsistency:
+    '''
+    TOPOLOGY: consistency.xml
+    '''
 
     @pytest.fixture
     def graph(self):

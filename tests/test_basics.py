@@ -6,6 +6,9 @@ from time import sleep
 from utils import to_url, wait_for_node, TOPOLOGY_PATH
 
 class TestBasics:
+    '''
+    TOPOLOGY: perso.xml
+    '''
 
     @pytest.fixture
     def graph(self):
