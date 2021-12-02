@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<graphml xmlns="http://graphml.graphdrawing.org/xmlns"
+	 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	 xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns
+	   http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">
+	<key id="attr0000" for="node" attr.name="isSource" attr.type="boolean"/>
+	<key id="attr0001" for="node" attr.name="isNode" attr.type="boolean"/>
+	<key id="attr0002" for="node" attr.name="ui.label" attr.type="string"/>
+	<key id="attr0003" for="node" attr.name="ui.style" attr.type="string"/>
+	<graph id="Minimal Graph" edgedefault="undirected">
+		<node id="A">
+			<data key="attr0000">true</data>
+			<data key="attr0001">true</data>
+			<data key="attr0002">A</data>
+			<data key="attr0003">shape:circle;fill-color: red;size: 30px;</data>
+		</node>
+		<node id="B">
+			<data key="attr0000">false</data>
+			<data key="attr0001">true</data>
+			<data key="attr0002">B</data>
+			<data key="attr0003">shape:circle;fill-color: yellow;size: 30px;</data>
+		</node>
+		<node id="C">
+			<data key="attr0000">false</data>
+			<data key="attr0001">true</data>
+			<data key="attr0002">C</data>
+			<data key="attr0003">shape:circle;fill-color: yellow;size: 30px;</data>
+		</node>
+		<node id="D">
+			<data key="attr0000">false</data>
+			<data key="attr0001">true</data>
+			<data key="attr0002">D</data>
+			<data key="attr0003">shape:circle;fill-color: yellow;size: 30px;</data>
+		</node>
+		<node id="wAB">
+			<data key="attr0000">false</data>
+			<data key="attr0001">false</data>
+			<data key="attr0002">wAB</data>
+			<data key="attr0003">shape:circle;fill-color: grey;size: 5px;</data>
+		</node>
+		<node id="wCD1">
+			<data key="attr0000">false</data>
+			<data key="attr0001">false</data>
+			<data key="attr0002">wCD1</data>
+			<data key="attr0003">shape:circle;fill-color: grey;size: 5px;</data>
+		</node>
+		<node id="wCD2">
+			<data key="attr0000">false</data>
+			<data key="attr0001">false</data>
+			<data key="attr0002">wCD2</data>
+			<data key="attr0003">shape:circle;fill-color: grey;size: 5px;</data>
+		</node>
+		<edge id="AB1" source="A" target="wAB" directed="false">
+		</edge>
+		<edge id="AB2" source="wAB" target="B" directed="false">
+		</edge>
+		<edge id="BC" source="B" target="C" directed="false">
+		</edge>
+		<edge id="BD" source="B" target="D" directed="false">
+		</edge>
+		<edge id="CD1" source="C" target="wCD1" directed="false">
+		</edge>
+		<edge id="CD2" source="wCD1" target="wCD2" directed="false">
+		</edge>
+		<edge id="CD3" source="wCD2" target="D" directed="false">
+		</edge>
+	</graph>
+</graphml>

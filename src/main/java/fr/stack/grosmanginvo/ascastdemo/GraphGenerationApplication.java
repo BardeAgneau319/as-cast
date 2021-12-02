@@ -32,26 +32,38 @@ public class GraphGenerationApplication {
         */
 
         // Graph perso avec une seule source
-        addNode(graph, "A", true);
-        addNode(graph, "B", false);
-        addNode(graph, "C", false);
-        addNode(graph, "D", false);
-        graph.addEdge("AB", "A", "B");
+        addNode(graph, "A", "source");
+        addNode(graph, "B", "node");
+        addNode(graph, "C", "node");
+        addNode(graph, "D", "node");
+
+        // relay to add weight
+        addNode(graph, "wAB", "relay");
+        addNode(graph, "wCD1", "relay");
+        addNode(graph, "wCD2", "relay");
+
+        graph.addEdge("AB1", "A", "wAB");
+        graph.addEdge("AB2", "wAB", "B");
         graph.addEdge("BC", "B", "C");
         graph.addEdge("BD", "B", "D");
-        graph.addEdge("CD", "C", "D");
+        graph.addEdge("CD1", "C", "wCD1");
+        graph.addEdge("CD2", "wCD1", "wCD2");
+        graph.addEdge("CD3", "wCD2", "D");
+
+
         FileSinkGraphML fs = new FileSinkGraphML();
-        fs.writeAll(graph, "perso.xml");
+        fs.writeAll(graph, "consistency.xml");
     }
 
-    private static void addNode(Graph graph, String key, Boolean isSource) {
+    private static void addNode(Graph graph, String key, String type) {
         Node n = graph.addNode(key);
-        n.setAttribute("isSource", isSource);
+        n.setAttribute("isSource", type.equals("source"));
+        n.setAttribute("isNode", type.equals("source") || type.equals("node"));
 
         // styling
         n.setAttribute("ui.label", key);
-        n.getAttribute("isSource");
-        if (isSource) n.setAttribute("ui.style", "shape:circle;fill-color: red;size: 30px;");
-        else n.setAttribute("ui.style", "shape:circle;fill-color: yellow;size: 30px;");
+        if (type.equals("source")) n.setAttribute("ui.style", "shape:circle;fill-color: red;size: 30px;");
+        else if (type.equals("node")) n.setAttribute("ui.style", "shape:circle;fill-color: yellow;size: 30px;");
+        else n.setAttribute("ui.style", "shape:circle;fill-color: grey;size: 5px;");
     }
 }
